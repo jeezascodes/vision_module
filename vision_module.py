@@ -1,5 +1,6 @@
 import requests
-
+import json
+from validate_curp import validate_curp
 
 def get_image_text(base_64_image):
     key = 'AIzaSyAHDvJchYHbM84G4Me2HAGkodAQB99C-U0'
@@ -13,12 +14,15 @@ def get_image_text(base_64_image):
     ]}
 
     r = requests.post(
-        'https://vision.googleapis.com/v1/images:annotate?key=' + key, data=str(payload))
+        'https://vision.googleapis.com/v1/images:annotate?key=' + key, data=json.dumps(payload))
     res = r.json()
 
-    if 'responses' in res and bool(res['responses'][0]):
-            text = res['responses'][0]['textAnnotations']
-            return list(map(lambda item: item['description'], text))
+    if 'responses' in res and 'textAnnotations' in res['responses'][0]:
+        text = res['responses'][0]['textAnnotations']
+        detected_curp = list(
+            filter(lambda item: validate_curp(item['description']), text))
+
+        return detected_curp[0]['description'] if bool(detected_curp) else None
     else:
-        return res
+        return None
 
