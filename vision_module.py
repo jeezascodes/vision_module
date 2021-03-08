@@ -17,9 +17,8 @@ def get_image_text(base_64_image):
     res = r.json()
 
     if 'responses' in res and bool(res['responses'][0]):
-            text = list(res['responses'][0]['textAnnotations'])
+            text = res['responses'][0]['textAnnotations']
             return list(map(lambda item: item['description'], text))
     else:
         return res
-
 
