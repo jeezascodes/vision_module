@@ -3,7 +3,7 @@ import json
 from validate_curp import validate_curp
 
 def get_image_text(base_64_image):
-    key = 'AIzaSyAHDvJchYHbM84G4Me2HAGkodAQB99C-U0'
+    key = 'YOUR_KEY'
     payload = {'requests': [
         {
             'image': {
